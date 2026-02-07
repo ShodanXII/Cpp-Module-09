@@ -65,24 +65,19 @@ void BitcoinExchange::loadDatabase(void)
 		std::cerr << "Error: could not open database file." << std::endl;
 		return;
 	}
-
 	std::string line;
 	std::getline(file, line); // skip header
-
 	while (std::getline(file, line))
 	{
 		std::string::size_type pos = line.find(',');
 		if (pos == std::string::npos)
 			continue;
-
 		std::string date = line.substr(0, pos);
 		std::string rateStr = line.substr(pos + 1);
-
 		char *end;
 		double rate = std::strtod(rateStr.c_str(), &end);
 		if (*end != '\0' && *end != '\r')
 			continue;
-
 		_data[date] = rate;
 	}
 	file.close();
@@ -98,16 +93,13 @@ void BitcoinExchange::processLine(const std::string &line)
 		std::cerr << "Error: bad input => " << line << std::endl;
 		return;
 	}
-
 	std::string date = line.substr(0, pipePos);
 	std::string valueStr = line.substr(pipePos + 3);
-
 	if (!isValidDate(date))
 	{
 		std::cerr << "Error: bad input => " << date << std::endl;
 		return;
 	}
-
 	char *end;
 	double value = std::strtod(valueStr.c_str(), &end);
 	if (*end != '\0' && *end != '\r')
@@ -115,7 +107,6 @@ void BitcoinExchange::processLine(const std::string &line)
 		std::cerr << "Error: bad input => " << line << std::endl;
 		return;
 	}
-
 	if (value < 0)
 	{
 		std::cerr << "Error: not a positive number." << std::endl;
@@ -126,10 +117,8 @@ void BitcoinExchange::processLine(const std::string &line)
 		std::cerr << "Error: too large a number." << std::endl;
 		return;
 	}
-
 	// Find closest lower or equal date
 	std::map<std::string, double>::iterator it = _data.lower_bound(date);
-
 	if (it == _data.end() || it->first != date)
 	{
 		if (it == _data.begin())
@@ -139,7 +128,6 @@ void BitcoinExchange::processLine(const std::string &line)
 		}
 		--it;
 	}
-
 	double result = value * it->second;
 	std::cout << date << " => " << value << " = " << result << std::endl;
 }
@@ -156,10 +144,8 @@ BitcoinExchange::BitcoinExchange(const std::string &file)
 		std::cerr << "Error: could not open file." << std::endl;
 		return;
 	}
-
 	std::string line;
 	std::getline(infile, line); // skip header
-
 	while (std::getline(infile, line))
 	{
 		if (line.empty())
