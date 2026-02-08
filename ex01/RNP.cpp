@@ -1,4 +1,3 @@
-
 #include "RNP.hpp"
 
 #include <cctype>
