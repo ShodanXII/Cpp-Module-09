@@ -39,7 +39,7 @@ void PmergeMe::execute( void )
               << " elements with std::deque  : " << (t4 - t3) << " us\n";
 }
 
-void PmergeMe::processLine(char *line)
+bool PmergeMe::processLine(char *line)
 {
     std::istringstream iss(line);
     std::string token;
@@ -49,23 +49,24 @@ void PmergeMe::processLine(char *line)
         for (size_t i = 0; i < token.size(); ++i)
         {
             if (!std::isdigit(token[i]))
-                return (void)(std::cout << "Error: non-numeric token\n");
+            {
+                std::cout << "Error: non-numeric token\n";
+                return false;
+            }
         }
         long n = std::strtol(token.c_str(), 0, 10);
         if (n < 0 || n > 2147483647)
-            return (void)(std::cout << "Error: out of range\n");
+        {
+            std::cout << "Error: out of range\n";
+            return false;
+        }
         _values_vec.push_back(static_cast<int>(n));
         _values_deq.push_back(static_cast<int>(n));
     }
     if (_values_vec.empty() || _values_deq.empty())
-        return (void)(std::cout << "Error: no numbers\n");
-    std::cout << "befor : Vector ";
-    for (size_t i = 0; i < _values_vec.size(); ++i)
-        std::cout << _values_vec[i] << " ";
-    std::cout << std::endl;
-    std::cout << "befor : Deque ";
-    for (size_t i = 0; i < _values_deq.size(); i++)
-        std::cout << _values_deq[i] << " ";
-    std::cout << std::endl;
-    
+    {
+        std::cout << "Error: no numbers\n";
+        return false;
+    }
+    return true;
 }
