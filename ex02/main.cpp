@@ -3,8 +3,14 @@
 
 int main(int ac, char **av)
 {
-    if(ac != 2) return (std::cout << "Enter the unsorted array after the program name" << std::endl, 1);
+    if (ac < 2)
+    {
+        std::cout << "Error" << std::endl;
+        return 1;
+    }
     PmergeMe pm;
-    pm.processLine(av[1]);
+    for (int i = 1; i < ac; ++i)
+        pm.addNumber(av[i]);
+    pm.execute();
     return 0;
 }
