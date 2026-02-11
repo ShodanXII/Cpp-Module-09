@@ -17,7 +17,7 @@ int main(int ac, char **av)
         input += av[i];
     }
     
-    if (!pm.processLine(const_cast<char*>(input.c_str())))
+    if (!pm.processLine(input.c_str()))
         return 1;
     pm.execute();
     return 0;

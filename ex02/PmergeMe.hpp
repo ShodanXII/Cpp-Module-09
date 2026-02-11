@@ -30,7 +30,7 @@ public:
 
     void execute();
     double nowMicros();
-    bool processLine(char *line);
+    bool processLine(const char *line);
 };
 
 // Template implementations must be in header file

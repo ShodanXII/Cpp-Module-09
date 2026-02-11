@@ -39,7 +39,7 @@ void PmergeMe::execute( void )
               << " elements with std::deque  : " << (t4 - t3) << " us\n";
 }
 
-bool PmergeMe::processLine(char *line)
+bool PmergeMe::processLine(const char *line)
 {
     std::istringstream iss(line);
     std::string token;
