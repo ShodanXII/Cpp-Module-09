@@ -53,37 +53,38 @@ void PmergeMe::addNumber(const char* str)
     _deq.push_back(static_cast<int>(n));
 }
 
-static std::vector<size_t> jacobsthalInsertionOrder(size_t count)
+static std::vector<size_t> jacobsthalInsertionOrder(size_t m)
 {
     std::vector<size_t> order;
-    if (count <= 1)
+    if (m <= 2) {
+        if (m == 2) order.push_back(1);
         return order;
+    }
 
-    std::vector<size_t> jacobsthal;
-    jacobsthal.push_back(0);
-    jacobsthal.push_back(1);
-    while (jacobsthal.back() < count)
+    size_t last = m - 1;
+    std::vector<char> used(last + 1, 0);
+    used[0] = 1;
+
+    size_t j0 = 0, j1 = 1;
+    while (true)
     {
-        size_t next = jacobsthal[jacobsthal.size() - 1]
-                    + 2 * jacobsthal[jacobsthal.size() - 2];
-        jacobsthal.push_back(next);
-    }
-    size_t prev = 1;
-    for (size_t k = 2; k < jacobsthal.size(); ++k)
-    {
-        size_t curr = jacobsthal[k];
-        if (curr >= count)
-            curr = count - 1;
-        for (size_t i = curr; i >= prev && i > 0; --i)
-        {
-            order.push_back(i);
+        size_t j2 = j1 + 2 * j0;
+        j0 = j1;
+        j1 = j2;
+
+        if (j1 > last) break;
+        if (!used[j1]) {
+            order.push_back(j1);
+            used[j1] = 1;
         }
-        prev = curr + 1;
-        if (prev >= count)
-            break;
     }
+
+    for (size_t k = 1; k <= last; ++k)
+        if (!used[k]) order.push_back(k);
+
     return order;
 }
+
 
 void PmergeMe::mergeInsertionSort(std::vector<int>& container)
 {
