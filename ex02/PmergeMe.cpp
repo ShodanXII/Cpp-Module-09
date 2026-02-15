@@ -170,20 +170,16 @@ void PmergeMe::execute()
         std::cout << "Error" << std::endl;
         return;
     }
-
     std::cout << "Before:";
     for (size_t i = 0; i < _vec.size(); ++i)
         std::cout << " " << _vec[i];
     std::cout << std::endl;
-
     double t1 = nowMicros();
     mergeInsertionSort(_vec);
     double t2 = nowMicros();
-
     double t3 = nowMicros();
     mergeInsertionSort(_deq);
     double t4 = nowMicros();
-
     std::cout << "After:";
     for (size_t i = 0; i < _vec.size(); ++i)
         std::cout << " " << _vec[i];

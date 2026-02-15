@@ -1,7 +1,5 @@
 #include "BitcoinExchange.hpp"
 
-/* ---- Orthodox Canonical Form ---- */
-
 BitcoinExchange::BitcoinExchange(void) {}
 
 BitcoinExchange::BitcoinExchange(const BitcoinExchange &other) : _data(other._data) {}
@@ -14,8 +12,6 @@ BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &other)
 }
 
 BitcoinExchange::~BitcoinExchange(void) {}
-
-/* ---- Helpers ---- */
 
 bool BitcoinExchange::isLeapYear(int year)
 {
@@ -55,7 +51,7 @@ bool BitcoinExchange::isValidDate(const std::string &date)
 	return true;
 }
 
-/* ---- Database loading ---- */
+// Database loading
 
 void BitcoinExchange::loadDatabase(void)
 {
@@ -117,7 +113,6 @@ void BitcoinExchange::processLine(const std::string &line)
 		std::cerr << "Error: too large a number." << std::endl;
 		return;
 	}
-	// Find closest lower or equal date
 	std::map<std::string, double>::iterator it = _data.lower_bound(date);
 	if (it == _data.end() || it->first != date)
 	{
@@ -132,8 +127,6 @@ void BitcoinExchange::processLine(const std::string &line)
 	std::cout << date << " => " << value << " = " << result << std::endl;
 }
 
-/* ---- Main constructor: load DB then process input ---- */
-
 BitcoinExchange::BitcoinExchange(const std::string &file)
 {
 	loadDatabase();
@@ -145,7 +138,7 @@ BitcoinExchange::BitcoinExchange(const std::string &file)
 		return;
 	}
 	std::string line;
-	std::getline(infile, line); // skip header
+	std::getline(infile, line);
 	while (std::getline(infile, line))
 	{
 		if (line.empty())
