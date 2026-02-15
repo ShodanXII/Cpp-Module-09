@@ -53,6 +53,38 @@ void PmergeMe::addNumber(const char* str)
     _deq.push_back(static_cast<int>(n));
 }
 
+static std::vector<size_t> jacobsthalInsertionOrder(size_t count)
+{
+    std::vector<size_t> order;
+    if (count <= 1)
+        return order;
+
+    std::vector<size_t> jacobsthal;
+    jacobsthal.push_back(0);
+    jacobsthal.push_back(1);
+    while (jacobsthal.back() < count)
+    {
+        size_t next = jacobsthal[jacobsthal.size() - 1]
+                    + 2 * jacobsthal[jacobsthal.size() - 2];
+        jacobsthal.push_back(next);
+    }
+    size_t prev = 1;
+    for (size_t k = 2; k < jacobsthal.size(); ++k)
+    {
+        size_t curr = jacobsthal[k];
+        if (curr >= count)
+            curr = count - 1;
+        for (size_t i = curr; i >= prev && i > 0; --i)
+        {
+            order.push_back(i);
+        }
+        prev = curr + 1;
+        if (prev >= count)
+            break;
+    }
+    return order;
+}
+
 void PmergeMe::mergeInsertionSort(std::vector<int>& container)
 {
     if (container.size() <= 1)
@@ -73,7 +105,6 @@ void PmergeMe::mergeInsertionSort(std::vector<int>& container)
     }
     if (hasStraggler)
         straggler = container[container.size() - 1];
-
     for (size_t i = 0; i < pairs.size(); ++i)
     {
         for (size_t j = i + 1; j < pairs.size(); ++j)
@@ -82,22 +113,22 @@ void PmergeMe::mergeInsertionSort(std::vector<int>& container)
                 std::swap(pairs[i], pairs[j]);
         }
     }
-
     std::vector<int> mainChain;
     for (size_t i = 0; i < pairs.size(); ++i)
         mainChain.push_back(pairs[i].first);
-
-    if (!pairs.empty())
-        mainChain.insert(mainChain.begin(), pairs[0].second);
-
-    for (size_t i = 1; i < pairs.size(); ++i)
+    std::vector<int> losers;
+    for (size_t i = 0; i < pairs.size(); ++i)
+        losers.push_back(pairs[i].second);
+    if (!losers.empty())
+        mainChain.insert(mainChain.begin(), losers[0]);
+    std::vector<size_t> insertOrder = jacobsthalInsertionOrder(losers.size());
+    for (size_t i = 0; i < insertOrder.size(); ++i)
     {
-        int toInsert = pairs[i].second;
+        int toInsert = losers[insertOrder[i]];
         std::vector<int>::iterator pos = std::lower_bound(
             mainChain.begin(), mainChain.end(), toInsert);
         mainChain.insert(pos, toInsert);
     }
-
     if (hasStraggler)
     {
         std::vector<int>::iterator pos = std::lower_bound(
@@ -137,17 +168,21 @@ void PmergeMe::mergeInsertionSort(std::deque<int>& container)
                 std::swap(pairs[i], pairs[j]);
         }
     }
-
     std::deque<int> mainChain;
     for (size_t i = 0; i < pairs.size(); ++i)
         mainChain.push_back(pairs[i].first);
 
-    if (!pairs.empty())
-        mainChain.insert(mainChain.begin(), pairs[0].second);
+    std::vector<int> losers;
+    for (size_t i = 0; i < pairs.size(); ++i)
+        losers.push_back(pairs[i].second);
 
-    for (size_t i = 1; i < pairs.size(); ++i)
+    if (!losers.empty())
+        mainChain.insert(mainChain.begin(), losers[0]);
+
+    std::vector<size_t> insertOrder = jacobsthalInsertionOrder(losers.size());
+    for (size_t i = 0; i < insertOrder.size(); ++i)
     {
-        int toInsert = pairs[i].second;
+        int toInsert = losers[insertOrder[i]];
         std::deque<int>::iterator pos = std::lower_bound(
             mainChain.begin(), mainChain.end(), toInsert);
         mainChain.insert(pos, toInsert);
