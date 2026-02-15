@@ -5,15 +5,15 @@
 #include <string>
 #include <stack>
 
-class RNP
+class RPN
 {
 private:
     std::stack<double> _stack;
 public:
-    RNP();
-    RNP( const RNP &other );
-    ~RNP( void );
-    RNP &operator=( const RNP &other );
+    RPN();
+    RPN( const RPN &other );
+    ~RPN( void );
+    RPN &operator=( const RPN &other );
 
     void processLine( const std::string &line );
 };

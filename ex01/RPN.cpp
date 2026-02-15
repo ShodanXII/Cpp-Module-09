@@ -1,21 +1,21 @@
-#include "RNP.hpp"
+#include "RPN.hpp"
 
 #include <cctype>
 
-RNP::RNP() {}
+RPN::RPN() {}
 
-RNP::RNP(const RNP &other) : _stack(other._stack) {}
+RPN::RPN(const RPN &other) : _stack(other._stack) {}
 
-RNP &RNP::operator=(const RNP &other)
+RPN &RPN::operator=(const RPN &other)
 {
     if (this != &other)
         _stack = other._stack;
     return *this;
 }
 
-RNP::~RNP() {}
+RPN::~RPN() {}
 
-void RNP::processLine(const std::string &line)
+void RPN::processLine(const std::string &line)
 {
     for (int i = 0; i < static_cast<int>(line.size()); i++)
     {
